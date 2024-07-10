@@ -51,9 +51,11 @@ jobs:
         terraform apply -auto-approve -var-file=instance.tfvars -var-file=network.tfvars -var-file=terastate.tfvars
 
     - name: Terraform Destruction
+
       working-directory: ./terraform
       env:
         TF_VAR_key_pair: ${{ secrets.KEYPAIRNAME }}
       run: |
         terraform destroy -auto-approve -var-file=instance.tfvars -var-file=network.tfvars -var-file=terastate.tfvars
+
 
