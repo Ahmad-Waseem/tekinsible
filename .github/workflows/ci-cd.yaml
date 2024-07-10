@@ -32,3 +32,8 @@ jobs:
     - name: Terraform Apply
       working-directory: terraform
       run: terraform apply -auto-approve -var-file=instance.tfvars -var-file=network.tfvars -var-file=terastate.tfvars
+
+    - name: Terraform Destruction
+    - working-directory: terraform
+    - run: terraform destroy -auto-approve -var-file=instance.tfvars -var-file=network.tfvars -var-file=terastate.tfvars
+
