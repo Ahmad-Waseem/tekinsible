@@ -1,5 +1,12 @@
 
 #--------- image of hardware reqs {each should be same length}
+
+
+engine_ami_name = "ubuntu22 -old"
+
+
+engine_ami = "ami-003932de22c285676"
+
 engine = ["amzn2-ami-hvm-2.0.*-x86_64-gp2"]
 
 engine_virtualization_type = ["hvm"]
@@ -23,4 +30,4 @@ subnet_count = 1
 
 #key pair name
 
-keypairname = "onewebserver-01"
+#keypairname = "onewebserver-01"
