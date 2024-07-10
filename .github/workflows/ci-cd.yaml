@@ -27,8 +27,10 @@ jobs:
 
     - name: Terraform Init
       working-directory: terraform
-      run: terraform init
+      run: |
+        terraform init
+        rm -rf .terraform/
 
     - name: Terraform Apply
       working-directory: terraform
-      run:run: terraform apply -auto-approve -var-file=instance.tfvars -var-file=network.tfvars -var-file=terastate.tfvars
+      run: terraform apply -auto-approve -var-file=instance.tfvars -var-file=network.tfvars -var-file=terastate.tfvars
