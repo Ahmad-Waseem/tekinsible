@@ -26,6 +26,7 @@ jobs:
       uses: hashicorp/setup-terraform@v2
 
         
+
     - name: Set SSH Key
       working-directory: ./terraform
       env:
@@ -33,10 +34,10 @@ jobs:
         KEYPAIR_NAME: ${{ secrets.KEYPAIRNAME }}
       run: |
         mkdir -p ~/.ssh
-        echo "$SSH_KEY" > ~/.ssh/${{ secrets.KEYPAIR_NAME }}.pem
-        chmod 400 ~/.ssh/${{ secrets.KEYPAIR_NAME }}.pem
+        echo "$SSH_KEY" > ~/.ssh/${{ secrets.KEYPAIRNAME }}.pem
+        chmod 400 ~/.ssh/${{ secrets.KEYPAIRNAME }}.pem
         eval "$(ssh-agent -s)"
-        ssh-add ~/.ssh/${{ secrets.KEYPAIR_NAME }}.pem
+        ssh-add ~/.ssh/${{ secrets.KEYPAIRNAME }}.pem
 
     - name: Terraform Init
       working-directory: ./terraform
