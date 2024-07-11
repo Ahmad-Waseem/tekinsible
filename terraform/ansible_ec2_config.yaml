@@ -38,7 +38,7 @@
 
     - name: Put docker-compose on server
       copy:
-        src: doker-compose.yml
+        src: docker-compose.yml
         dest: /home/ubunto/docker-compose.yml
 
     - name: Trigger docker-compose.yml on remote system
