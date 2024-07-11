@@ -105,13 +105,3 @@ variable "key_address" {
   description = "HINT: where the ssh always answers"   
 }
 
-variable "bucket_name" {
-  type        = string
-  description = "s3 bucket name"
-}
-
-
-variable "bucket_storage" {
-  type        = string
-  description = "s3 storage id"
-}

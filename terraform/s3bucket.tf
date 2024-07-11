@@ -2,8 +2,8 @@
 
 terraform {
   backend "s3" {
-    bucket = var.bucket_name
-    key    = "path/${var.bucket_storage}"
+    bucket = "terra-byte-storage"
+    key    = "tekinsible007"
     region = var.region
   }
 }
