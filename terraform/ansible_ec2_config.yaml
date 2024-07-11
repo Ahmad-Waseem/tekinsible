@@ -39,7 +39,7 @@
     - name: Put docker-compose on server
       copy:
         src: doker-compose.yml
-        dest: /home/ubunto/doker-compose.yml
+        dest: /home/ubunto/docker-compose.yml
 
     - name: Trigger docker-compose.yml on remote system
       ansible.builtin.shell: sudo docker-compose up -d
