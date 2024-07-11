@@ -4,11 +4,14 @@
   become: true
 
   tasks:
-
+    - name: Update apt cache
+      ansible.builtin.command: echo "Updating apt cache..."
     - name: Update apt cache
       apt:
         update_cache: yes
-    
+
+    - name: Install prerequisites
+      ansible.builtin.command: echo "Installing prerequisites..."
     - name: Install prerequisites
       apt:
         name:
@@ -20,15 +23,21 @@
         update_cache: true
 
     - name: Add apt-key
+      ansible.builtin.command: echo "Adding apt-key..."
+    - name: Add apt-key
       ansible.builtin.apt_key:
         url: https://download.docker.com/linux/ubuntu/gpg
 
+    - name: Add docker repo
+      ansible.builtin.command: echo "Adding Docker repo..."
     - name: Add docker repo
       ansible.builtin.apt_repository:
         repo: deb https://download.docker.com/linux/ubuntu focal stable
 
     - name: Install docker
-      ansible.builtin.apt:
+      ansible.builtin.command: echo "Installing Docker..."
+    - name: Install docker
+      apt:
         name:
           - docker-ce
           - docker-ce-cli
@@ -36,17 +45,21 @@
           - docker-compose
         update_cache: true
 
-    - name: Add user ubunto
+    - name: Add user ubuntu to Docker group
+      ansible.builtin.command: echo "Adding user ubuntu to Docker group..."
+    - name: Add user ubuntu to Docker group
       ansible.builtin.user:
-        name: ubunto
+        name: ubuntu
         groups: docker
         append: true
 
     - name: Create and trigger Ansible playbook remotely
-      hosts: your_remote_hosts
+      hosts: all
       become: true  # sudo
 
       tasks:
+        - name: Create Ansible playbook to setup Docker Compose
+          ansible.builtin.command: echo "Creating Ansible playbook to setup Docker Compose..."
         - name: Create Ansible playbook to setup Docker Compose
           copy:
             dest: "/home/ubuntu/.ansible/ansplay.yml"
@@ -54,9 +67,7 @@
               ---
               - name: Create Docker Compose file for Jenkins
                 hosts: all  # Run tasks on the localhost
-                become : true
-                #connection: local  # Use local connection
-                #gather_facts: false  # No need to gather facts
+                become: true
                 tasks:
                   - name: Create Docker Compose file
                     copy:
@@ -83,5 +94,6 @@
                       chdir: "/home/ubuntu"  #docker-compose.yml is located
 
         - name: Trigger ansplay.yml on remote system
+          ansible.builtin.command: echo "Triggering ansplay.yml on remote system..."
+        - name: Trigger ansplay.yml on remote system
           command: ansible-playbook /home/ubuntu/.ansible/ansplay.yml
-
