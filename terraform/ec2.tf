@@ -95,7 +95,7 @@ resource "aws_instance" "web" {
 data "template_file" "inventory" {
   template = <<-EOT
     [ec2_instances]
-    ${aws_instance.web.public_ip} ansible_user=ubuntu ansible_private_key_file= ${var.key_address}/${var.key_pair}.pem
+    ${aws_instance.web.public_ip} ansible_user=ubuntu ansible_private_key_file=${var.key_address}/${var.key_pair}.pem
     EOT
 }
 
