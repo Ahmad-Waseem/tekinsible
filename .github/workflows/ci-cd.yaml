@@ -38,7 +38,6 @@ jobs:
         chmod 400 ~/.ssh/${{ secrets.KEYPAIRNAME }}.pem
         eval "$(ssh-agent -s)"
         ssh-add ~/.ssh/${{ secrets.KEYPAIRNAME }}.pem
-
     - name: Terraform Init
       working-directory: ./terraform
       env:
@@ -46,7 +45,6 @@ jobs:
         TF_VAR_key_address: ~/.ssh
       run: |
         terraform init
-
     - name: Terraform Apply
       working-directory: ./terraform
       env:
@@ -65,4 +63,3 @@ jobs:
     - name: Terraform Bye Bye
       working-directory: terraform
       run: echo "Terraform completed"
-
