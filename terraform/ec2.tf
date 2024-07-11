@@ -118,7 +118,11 @@ resource "null_resource" "run_ansible" {
   depends_on = [local_file.inventory]
 
   provisioner "local-exec" {
-    command     = "chmod 400 ${local_file.inventory.filename} && sleep 30 && ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory.ini ansible_ec2_config.yaml"
+    command = <<-EOF
+      chmod 400 ${local_file.inventory.filename}
+      sleep 30
+      ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory.ini ansible_ec2_config.yaml
+    EOF
     working_dir = path.module
   }
 }
