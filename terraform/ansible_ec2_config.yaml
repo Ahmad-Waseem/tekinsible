@@ -45,10 +45,6 @@
         groups: docker
         append: true
 
-    - name: Create and trigger Ansible playbook remotely
-      hosts: all
-      become: true  # sudo
-
       tasks:
         - name: Create Ansible playbook to setup Docker Compose
           ansible.builtin.command: echo "Creating Ansible playbook to setup Docker Compose..."
