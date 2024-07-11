@@ -4,7 +4,7 @@ terraform {
   backend "s3" {
     bucket = "terra-byte-storage"
     key    = "tekinsible007"
-    region = var.region
+    region = "us-east-2"
   }
 }
 
