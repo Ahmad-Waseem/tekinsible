@@ -12,7 +12,6 @@ services:
     volumes:
       - /home/ubuntu/jenkins_compose/jenkins_configuration:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
-
 #   sonarqube:
 #     image: sonarqube:latest
 #     container_name: sonarqube
