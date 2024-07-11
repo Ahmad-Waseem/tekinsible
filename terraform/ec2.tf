@@ -112,16 +112,13 @@ resource "local_file" "inventory" {
   filename = "inventory.ini"
   content  = data.template_file.inventory.rendered
 
-  provisioner "local-exec" {
-    command = "chmod 400 ${local_file.inventory.filename}"
-  }
 }
 
 resource "null_resource" "run_ansible" {
   depends_on = [local_file.inventory]
 
   provisioner "local-exec" {
-    command     = "sleep 30 && ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory.ini ansible_ec2_config.yaml"
+    command     = "chmod 400 ${local_file.inventory.filename} && sleep 30 && ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory.ini ansible_ec2_config.yaml"
     working_dir = path.module
   }
 }
