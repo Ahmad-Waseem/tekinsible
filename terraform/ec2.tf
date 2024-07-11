@@ -82,7 +82,7 @@ resource "aws_instance" "web" {
 
   tags = {
     Name = "t2_micro_ec2"
-    ami = var.engine_ami_name
+    ami  = var.engine_ami_name
   }
 }
 
@@ -106,7 +106,11 @@ resource "local_file" "inventory" {
   content  = data.template_file.inventory.rendered
 
   provisioner "local-exec" {
-    command = "chmod 400 ${local_file.inventory.filename}"
+    command = <<EOT
+chmod 400 ${local_file.inventory.filename}
+echo "Contents of inventory.ini:"
+cat ${local_file.inventory.filename}
+EOT
   }
 }
 
