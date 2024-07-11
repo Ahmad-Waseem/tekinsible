@@ -4,6 +4,11 @@
   become: true
 
   tasks:
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+    
     - name: Install prerequisites
       apt:
         name:
@@ -36,3 +41,47 @@
         name: ubunto
         groups: docker
         append: true
+
+    - name: Create and trigger Ansible playbook remotely
+      hosts: your_remote_hosts
+      become: true  # sudo
+
+      tasks:
+        - name: Create Ansible playbook to setup Docker Compose
+          copy:
+            dest: "/home/ubuntu/.ansible/ansplay.yml"
+            content: |
+              ---
+              - name: Create Docker Compose file for Jenkins
+                hosts: all  # Run tasks on the localhost
+                become : true
+                #connection: local  # Use local connection
+                #gather_facts: false  # No need to gather facts
+                tasks:
+                  - name: Create Docker Compose file
+                    copy:
+                      dest: "/home/ubuntu/docker-compose.yml"
+                      content: |
+                        version: '3'
+                        services:
+                          jenkins:
+                            image: jenkins/jenkins:lts
+                            restart: always
+                            privileged: true
+                            user: root
+                            ports:
+                              - "8080:8080"
+                              - "50000:50000"
+                            container_name: jenkins
+                            volumes:
+                              - /home/ubuntu/jenkins_compose/jenkins_configuration:/var/jenkins_home
+                              - /var/run/docker.sock:/var/run/docker.sock
+
+                  - name: Trigger docker-compose.yml using docker-compose command
+                    command: docker-compose up -d
+                    args:
+                      chdir: "/home/ubuntu"  #docker-compose.yml is located
+
+        - name: Trigger ansplay.yml on remote system
+          command: ansible-playbook /home/ubuntu/.ansible/ansplay.yml
+

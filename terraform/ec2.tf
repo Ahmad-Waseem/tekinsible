@@ -39,7 +39,7 @@ resource "aws_security_group" "ssh_access" {
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"] #["${chomp(data.http.my_ip.response_body)}/32"]
-  }
+  }#-----------> For ansible
 
   ingress {
     from_port   = 3000
@@ -53,7 +53,14 @@ resource "aws_security_group" "ssh_access" {
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"] #["${chomp(data.http.my_ip.response_body)}/32"]
-  }
+  }#------------> For TCP PACKETS/ For safeside
+
+  ingress {
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] #["${chomp(data.http.my_ip.response_body)}/32"]
+  }#---------> for Jenkins
 
   egress {
     from_port   = 0
