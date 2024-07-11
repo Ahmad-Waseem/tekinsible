@@ -36,43 +36,12 @@
         groups: docker
         append: true
 
-- hosts: localhost
-  connection: local
-  become: true
-  tasks:
-    - name: Create Ansible playbook to setup Docker Compose
-      copy:
-        dest: "/home/ubuntu/.ansible/ansplay.yml"
-        content: |
-          ---
-          - name: Create Docker Compose file for Jenkins
-            hosts: all  # Run tasks on the localhost
-            become: true
-            tasks:
-              - name: Create Docker Compose file
-                copy:
-                  dest: "/home/ubuntu/docker-compose.yml"
-                  content: |
-                    version: '3'
-                    services:
-                      jenkins:
-                        image: jenkins/jenkins:lts
-                        restart: always
-                        privileged: true
-                        user: root
-                        ports:
-                          - "8080:8080"
-                          - "50000:50000"
-                        container_name: jenkins
-                        volumes:
-                          - /home/ubuntu/jenkins_compose/jenkins_configuration:/var/jenkins_home
-                          - /var/run/docker.sock:/var/run/docker.sock
+    - name: Ansible Copy File
+      tasks:
+        - name: Put docker-compose on server
+          copy:
+              src: doker-compose.yml
+              dest: /home/ubunto/doker-compose.yml
 
-              - name: Trigger docker-compose.yml using docker-compose command
-                command: docker-compose up -d
-                args:
-                  chdir: "/home/ubuntu"  #docker-compose.yml is located
-
-    - name: Trigger ansplay.yml on remote system
-      ansible.builtin.command: ansible-playbook /home/ubuntu/.ansible/ansplay.yml
-
+    - name: Trigger docker-compose.yml on remote system
+      ansible.builtin.shell: sudo docker-compose up -d
