@@ -106,13 +106,21 @@ resource "local_file" "inventory" {
   content  = data.template_file.inventory.rendered
 
   provisioner "local-exec" {
-    command = <<EOT
-chmod 600 ${local_file.inventory.filename}
-echo "Contents of inventory.ini:"
-cat ${local_file.inventory.filename}
-EOT
+    command = "chmod 600 ${local_file.inventory.filename}"
   }
 }
+
+
+resource "null_resource" "outinventory"{
+  depends_on = [aws_instance.web]
+  provisioner "name" {
+    command = "cat ${local_file.inventory.filename}"
+  }
+
+}
+
+
+
 
 resource "null_resource" "run_ansible" {
   depends_on = [local_file.inventory]
