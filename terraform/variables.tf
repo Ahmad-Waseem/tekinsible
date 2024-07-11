@@ -40,6 +40,15 @@ variable "private_destination" {
 
 #-----> Engine_* must have same length to engine
 
+variable "engine_ami" {
+  type = string
+  description = "AMI's id from AWS WEB"
+}
+
+variable "engine_ami_name" {
+  type = string
+}
+
 variable "engine" {
   type = list(string)
 }
@@ -86,11 +95,15 @@ variable "subnet_count" {
 
 #key pair variable
 
-variable "keypairname" {
+variable "key_pair" {
   type        = string
   description = ".pem key file name"
 }
 
+variable "key_address" {
+  type        = string
+  description = "HINT: where the ssh always answers"   
+}
 
 variable "bucket_name" {
   type        = string
@@ -98,7 +111,7 @@ variable "bucket_name" {
 }
 
 
-variable "dynamodb_table_name" {
+variable "bucket_storage" {
   type        = string
-  description = "dynamo DB table name"
+  description = "s3 storage id"
 }

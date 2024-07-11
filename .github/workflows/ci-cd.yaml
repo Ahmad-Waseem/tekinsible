@@ -25,14 +25,40 @@ jobs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
 
+        
+    - name: Set SSH Key
+      working-directory: ./terraform
+      env:
+        SSH_KEY: ${{ secrets.KEYVALUE }}
+        KEYPAIR_NAME: ${{ secrets.KEYPAIRNAME }}
+      run: |
+        mkdir -p ~/.ssh
+        echo "$SSH_KEY" > ~/.ssh/${{ secrets.KEYPAIR_NAME }}.pem
+        chmod 400 ~/.ssh/${{ secrets.KEYPAIR_NAME }}.pem
+        eval "$(ssh-agent -s)"
+        ssh-add ~/.ssh/${{ secrets.KEYPAIR_NAME }}.pem
+
     - name: Terraform Init
-      working-directory: terraform
-      run: terraform init
+      working-directory: ./terraform
+      env:
+        TF_VAR_key_pair: ${{ secrets.KEYPAIRNAME}}
+        TF_VAR_key_address: ~/.ssh
+      run: |
+        terraform init
 
     - name: Terraform Apply
-      working-directory: terraform
-      run: terraform apply -auto-approve -var-file=instance.tfvars -var-file=network.tfvars -var-file=terastate.tfvars
+      working-directory: ./terraform
+      env:
+        TF_VAR_key_pair: ${{ secrets.KEYPAIRNAME }}
+        TF_VAR_key_address: ~/.ssh
+      run: |
+        terraform apply -auto-approve -var-file=instance.tfvars -var-file=network.tfvars -var-file=terastate.tfvars
 
     - name: Terraform Destruction
+
       working-directory: terraform
+      env:
+        TF_VAR_key_pair: ${{ secrets.KEYPAIRNAME }}
+        TF_VAR_key_address: ~/.ssh
       run: terraform destroy -auto-approve -var-file=instance.tfvars -var-file=network.tfvars -var-file=terastate.tfvars
+
