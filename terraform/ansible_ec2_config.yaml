@@ -6,12 +6,12 @@
       apt:
         update_cache: yes
 
-    - name: Install Docker dependencies
-      apt:
-        name:
-          - docker.io
-          - python3-pip
-        state: present
+    # - name: Install Docker dependencies
+    #   apt:
+    #     name:
+    #       - docker.io
+    #       - python3-pip
+    #     state: present
 
     - name: Add apt-key
       ansible.builtin.apt_key:
