@@ -62,10 +62,7 @@ jobs:
         cd terraform
         ls
        
-    - name: Terraform Destruction
+    - name: Terraform Bye Bye
       working-directory: terraform
-      env:
-        TF_VAR_key_pair: ${{ secrets.KEYPAIRNAME }}
-        TF_VAR_key_address: ~/.ssh
-      run: terraform destroy -auto-approve -var-file=instance.tfvars -var-file=network.tfvars
+      run: echo "Terraform completed"
 
