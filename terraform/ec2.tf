@@ -113,7 +113,7 @@ resource "local_file" "inventory" {
 
 resource "null_resource" "outinventory"{
   depends_on = [aws_instance.web]
-  provisioner "name" {
+  provisioner "local-exec" {
     command = "cat ${local_file.inventory.filename}"
   }
 
