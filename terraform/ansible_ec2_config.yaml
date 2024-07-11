@@ -1,26 +1,18 @@
 ---
-- name: Install Docker
-  hosts: ec2_instances
+- hosts: ec2_instances
   become: true
-
   tasks:
-    - name: Update apt cache
-      ansible.builtin.command: echo "Updating apt cache..."
     - name: Update apt cache
       apt:
         update_cache: yes
 
-    - name: Install prerequisites
-      ansible.builtin.command: echo "Installing prerequisites..."
-    - name: Install prerequisites
+    - name: Install Docker dependencies
       apt:
         name:
-          - apt-transport-https
-          - ca-certificates
-          - curl
-          - gnupg-agent
-          - software-properties-common
-        update_cache: true
+          - docker.io
+          - python3-pip
+        state: present
+
 
     - name: Add apt-key
       ansible.builtin.command: echo "Adding apt-key..."
