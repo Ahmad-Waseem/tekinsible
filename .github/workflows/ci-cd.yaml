@@ -53,7 +53,7 @@ jobs:
         TF_VAR_key_pair: ${{ secrets.KEYPAIRNAME }}
         TF_VAR_key_address: ~/.ssh
       run: |
-        terraform apply -auto-approve -var-file=instance.tfvars -var-file=network.tfvars -var-file=terastate.tfvars
+        terraform apply -auto-approve -var-file=instance.tfvars -var-file=network.tfvars
 
     - name: Terraform Destruction
 
@@ -61,5 +61,5 @@ jobs:
       env:
         TF_VAR_key_pair: ${{ secrets.KEYPAIRNAME }}
         TF_VAR_key_address: ~/.ssh
-      run: terraform destroy -auto-approve -var-file=instance.tfvars -var-file=network.tfvars -var-file=terastate.tfvars
+      run: terraform destroy -auto-approve -var-file=instance.tfvars -var-file=network.tfvars
 
