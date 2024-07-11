@@ -54,9 +54,15 @@ jobs:
         TF_VAR_key_address: ~/.ssh
       run: |
         terraform apply -auto-approve -var-file=instance.tfvars -var-file=network.tfvars
-
+    - name: Check
+      run: ls
+      
+    - name: terraform check
+      run: |
+        cd terraform
+        ls
+       
     - name: Terraform Destruction
-
       working-directory: terraform
       env:
         TF_VAR_key_pair: ${{ secrets.KEYPAIRNAME }}
