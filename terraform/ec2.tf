@@ -118,15 +118,6 @@ resource "local_file" "inventory" {
 }
 
 
-resource "null_resource" "outinventory"{
-  depends_on = [aws_instance.web]
-  provisioner "local-exec" {
-    command = "cat ${local_file.inventory.filename}"
-  }
-
-}
-
-
 
 
 resource "null_resource" "run_ansible" {
