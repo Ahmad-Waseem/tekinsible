@@ -44,4 +44,4 @@
     - name: Trigger docker-compose.yml on remote system
       ansible.builtin.shell:
         cmd: sudo docker-compose up -d
-        chdir: /home/ubunto
+        chdir: /home/ubuntu
