@@ -39,21 +39,21 @@ resource "aws_security_group" "ssh_access" {
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"] #["${chomp(data.http.my_ip.response_body)}/32"]
-  }
+  }#----> ansible default
 
   ingress {
     from_port   = 8080
     to_port     = 8080
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"] #["${chomp(data.http.my_ip.response_body)}/32"]
-  }#------------> For TCP PACKETS/ For safeside
+  }#------------> For jenkins
 
   ingress {
-    from_port   = 3000
-    to_port     = 3000
+    from_port   = 9000
+    to_port     = 9000
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] #["${chomp(data.http.my_ip.response_body)}/32"]
-  }
+    cidr_blocks = ["0.0.0.0/0"]
+  }#-------------> sonarQube
 
   ingress {
     from_port   = 80
