@@ -1,11 +1,13 @@
 # Tekinsible
-*TE*RRAFORM
-JEN*KIN*S
-AN*SIBLE*
-DOCKER
+*TE*RRAFORM 
+JEN*KIN*S 
+*S*ONARQUBE 
+ANS*IBLE* 
+DOCKER 
+AWS
 ------------------------------------------------------------------------------------------
 
-GitHub Documentation for the Project
+Following is the Workflow Documentation for the Project
 
 ---------------------------------------------------------------------
 
@@ -21,6 +23,7 @@ This documentation provides a detailed explanation of the CI/CD pipeline impleme
 
 4. Docker Compose: The docker-compose.yml file is responsible for creating and running containers for Jenkins and SonarQube on the remote system.
 
+Ideally, the code to be worked on should be fetched from another repo, evauluated on SonarQube and then deploy through Jenkins Pipeline.
 In the following sections, we will provide a step-by-step explanation of each component and its configuration.
 
 ---------------------------------------------------------------------
@@ -96,3 +99,125 @@ The docker-compose.yml file ensures that the Jenkins and SonarQube containers ar
 In this documentation, we have provided a detailed explanation of the CI/CD pipeline implemented in this project. The pipeline includes GitHub Actions for triggering the workflow, which runs Terraform for provisioning AWS resources, at last triggers Ansible for configuring the remote system and pinging Docker Compose for running the application containers.
 
 By following this pipeline, you can automate the deployment and configuration of your application. Add 'nginx' and complete SonarQube and Jenkins Pipeline to Deploy your app. Super time saving and ensuring consistency in your DevOps processes!
+
+---------------------------------------------------------------------
+
+## IMPORTANT:
+
+1. If S3 bucket is not initialized correctly, each pipeline trigger will create NEW RESOURCES instead of modifying previous ones.
+2. The S3 Bucket used in the code is DOES NOT ENABLES ENCRYPTION OF THE STATE.
+2. Ansible's Config file must be init through CLI.
+3. Ansible's 'inventory.ini' can only be seen when run locally. In ci-cd pipeline, it is created in environment file of github workflows and removed once pipeline is completed, providing better secrecy to keypairname.
+4. 'docker-compose.yml' is stored 'locally' and then copied to remote system through ansible.
+5. 'docker-compose.yml' allows Jenkins to host on the remote system in this project. Beware! it is a bad practice and is depriciated.
+
+---------------------------------------------------------------------
+
+## Prerequisites
+
+Before setting up this CI/CD pipeline, ensure you have the following prerequisites:
+
+1. **AWS Account:** Access to an AWS account with the necessary permissions to create and manage resources.
+2. **GitHub Repository:** A GitHub repository to host the project and CI/CD configuration files.
+3. **GitHub Secrets:** Set up the following secrets in your GitHub repository:
+   - `AWS_KEY_ID`
+   - `AWS_KEY_PASS`
+   - `KEYPAIRNAME`
+   - `KEYVALUE`
+
+---------------------------------------------------------------------
+
+## Getting Started
+
+To get started with this project, follow these steps:
+
+1. **Clone the Repository:**
+   ```sh
+   git clone https://github.com/Ahmad-Waseem/tekinsible.git
+   cd tekinsible
+   ```
+
+2. **Configure Terraform Backend:**
+   Update the `s3_bucket.tf` file with your S3 bucket name and region.
+
+3. **Update Terraform Variables:**
+   Modify the `network.tfvars` and `ec2.tfvars` files with your specific configurations.
+
+4. **Commit and Push Changes:**
+   ```sh
+   git add .
+   git commit -m "Initial setup"
+   git push origin dev
+   ```
+
+5. **Trigger CI/CD Pipeline:**
+   The pipeline will automatically run on every push or pull request to the main branch.
+
+---------------------------------------------------------------------
+
+## Troubleshooting
+
+Here are some common issues and their solutions:
+
+1. **Workflow Pipeline Errors**
+   - Make sure the sanity ssh-agent of the environment being able to access secret key as '.pem' file.
+   - Make sure that the agent accesses the key with lower restrictions on reading access.
+   - Use conditions in Stages observing the completion of previous stage, so that no job runs before completion of prerequisite one.
+   - Use root user where neccessary. Make sure to mention the directory we want workflow to fetch/execute/modify scripts.
+
+2. **Terraform Errors:**
+   - Ensure your AWS credentials are correctly set up in GitHub Secrets.
+   - Check the Terraform state file configuration in the `s3_bucket.tf` file.
+   - Put /.terraform, terraform.state, .terraform, .terraform/ files in git ignore to solve large file errors.
+   - The network is needed to be attached to the subnets if Route Table is not being made.
+   - Private Networks will not run until NAT Table is made, which is out of AWS FREE TIER.
+
+3. **Ansible Playbook Fails:**
+   - Verify that the public IP of the EC2 instance is correctly added to the `inventory.ini` file.
+   - Ensure there is no extra/less space between each letter/symbol of inventory.ini template.
+   - Ensure the ansible playbook is running AFTER assignment of public ip to EC2.
+   - Ensure the SSH key provided in GitHub Secrets matches the key pair used for the EC2 instance.
+
+4. **Docker Compose Issues:**
+   - Ensure Docker and Docker Compose are correctly installed on the remote system.
+   - Verify that the `docker-compose.yml` file has the correct configurations for ports of Jenkins and SonarQube.
+   - Minimum requirement of both SonarQube and Jenkins to Run simulataneously is to use 'T2.medium' on AWS. Anything less will pop bottleneck, overload or throw service crashing errors. 
+   - Open the jenkins using 'docker-compose logs --follow' to get password for jenkins. Configure it through default settings. If it skips plugins like 'pipeline' or shows only one plugin, Jenkins is not configured correctly.
+---------------------------------------------------------------------
+
+## Future Enhancements
+
+Consider implementing the following enhancements to improve the pipeline:
+
+1. **Automated Testing:**
+   - Add unit and integration tests to the CI/CD pipeline to ensure code quality and reliability.
+
+2. **Security Enhancements:**
+   - Implement additional security measures such as IAM roles and policies to restrict access to AWS resources.
+
+3. **Scalability:**
+   - Enhance the infrastructure to support auto-scaling and load balancing for better performance and availability.
+
+---------------------------------------------------------------------
+
+## References
+
+Here are some useful references for further reading:
+
+1. [Terraform Documentation](https://www.terraform.io/docs/index.html)
+2. [Ansible Documentation](https://docs.ansible.com/)
+3. [Docker Compose Documentation](https://docs.docker.com/compose/)
+4. [GitHub Actions Documentation](https://docs.github.com/en/actions)
+
+---------------------------------------------------------------------
+
+## Contact
+
+For any questions or issues, please contact:
+
+- **Project Maintainer:** Muhammad Ahmed Waseem
+- **Email:** [ahmedwaseem7686@gmail.com](mailto:ahmedwaseem7686@gmail.com)
+- **GitHub:** [Ahmad-Waseem](https://github.com/Ahmad-Waseem)
+
+---------------------------------------------------------------------
+
